@@ -13,7 +13,8 @@
 
     </Window.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto">
+                  VerticalScrollBarVisibility="Auto"
+                  IsDeferredScrollingEnabled="True">
         <Grid Grid.IsSharedSizeScope="True">
             <!--<Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -28,9 +29,9 @@
                           Content="{Binding TableViewModel1}"
                           />
 
-            <ContentPresenter Grid.Row="1" 
+            <!--<ContentPresenter Grid.Row="1" 
                           Content="{Binding TableViewModel2}"
-                          />
+                          />-->
 
         </Grid>
     </ScrollViewer>

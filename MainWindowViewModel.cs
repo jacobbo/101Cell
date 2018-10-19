@@ -1,85 +1,105 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace WpfApp1
 {
     public class MainWindowViewModel : NotifyPropertyChangedBase, IDisposable
     {
-        
+        readonly Random _random = new Random();
         List<Subject<RowModel>> _subjects = new List<Subject<RowModel>>();
-        IDisposable _token;       
+        readonly IDisposable _token;
+
+        void UpdateGrid(/*IEnumerable<CellModel> data*/)
+        {
+            foreach (var i in Enumerable.Range(0, 10000))
+            {
+                var s = _random.Next(1, 999).ToString().ToUpper();
+
+            }
+            //using (var d = Dispatcher.CurrentDispatcher.DisableProcessing())
+            {
+                /* your work... Use dispacher.begininvoke... */
+            
+            //foreach (var cellData in data)
+                {
+
+
+                foreach (var cell in TableViewModel1.Cells
+                        .OfType<CellViewModel>()
+                        .Where(c => c.Column % _random.Next(3, 9) == 0))
+                {
+                    bool found = false;
+                    //foreach (var cell in column.Rows.OfType<CellViewModel>())
+                    {
+                        if (_random.Next(1, 10) % 3 == 0)
+                        {
+                            cell.Text = _random.Next(1, 999).ToString();
+                            found = true;
+                            //break;
+                        }
+                    }
+
+                    //if (found)
+                    //{
+                    //    break;
+                    //}
+                }
+
+
+                //TableViewModel1.RaisePropertyChanged();
+
+
+
+                    foreach (var cell in TableViewModel2.Cells
+                        .OfType<CellViewModel>()
+                        .Where(c => c.Column == 31))
+                    {
+                //    bool found = false;
+                //    foreach (var cell in column.Rows.OfType<CellViewModel>())
+                //    {
+                //        //if (cell.Column == cellData.Column &&
+                //        //    cell.Row == cellData.Row)
+                //        {
+                            cell.Text = _random.Next(1, 3).ToString();
+                //            found = true;
+                //            //break;
+                //        }
+                //    }
+
+                //    //if (found)
+                //    //{
+                //    //    break;
+                //    //}
+                }
+
+                    //TableViewModel2.RaisePropertyChanged();
+                }
+            }
+        }
 
         public MainWindowViewModel()
         {
-            Random _random = new Random();
+            
 
-            TableViewModel1 = new TableViewModel(61, 30);
+            TableViewModel1 = new TableViewModel(81, 60);
 
-            TableViewModel2 = new TableViewModel(61, 10);
+            TableViewModel2 = new TableViewModel(101, 50);
 
             var dataService = new CellDataService
             {
-                ColumnCount = 61,
+                ColumnCount = 101,
                 RowCount = 50
             };
 
             //var data = dataService.GetData(TimeSpan.FromMilliseconds(500));
             var interval = Observable.Interval(TimeSpan.FromMilliseconds(500));
 
-            _token = interval.ObserveOn(TaskPoolScheduler.Default)
-                .Subscribe((d) => 
-                {
-                    //foreach (var cellData in d)
-                    {
-                        foreach (var column in TableViewModel1.Columns.OfType<ColumnViewModel>())
-                        {
-                            //bool found = false;
-                            foreach (var cell in column.Rows.OfType<CellViewModel>())
-                            {
-                                //if (cell.Column == cellData.Column &&
-                                //    cell.Row == cellData.Row)
-                                {
-                                    cell.Text = _random.Next(1, 3).ToString();
-                                    //found = true;
-                                    //break;
-                                }
-                            }
-
-                            //if (found)
-                            //{
-                            //    break;
-                            //}
-                        }
-
-                        foreach (var column in TableViewModel2.Columns.OfType<ColumnViewModel>())
-                        {
-                            //bool found = false;
-                            foreach (var cell in column.Rows.OfType<CellViewModel>())
-                            {
-                                //if (cell.Column == cellData.Column &&
-                                //    cell.Row == cellData.Row)
-                                {
-                                    cell.Text = _random.Next(1, 3).ToString();
-                                    //found = true;
-                                    //break;
-                                }
-                            }
-
-                            //if (found)
-                            //{
-                            //    break;
-                            //}
-                        }
-                    }
-                });
+            _token = interval//.ObserveOn(TaskPoolScheduler.Default)
+                .Subscribe((l) => UpdateGrid());
 
             //_token = Observable.Interval(TimeSpan.FromMilliseconds(500)).Subscribe(_ =>
             //{
