@@ -4,7 +4,11 @@
     {
         public int Column { get; set; }
 
+        public int ColumnSpan { get; set; } = 1;
+
         public int Row { get; set; }
+
+        public int RowSpan { get; set; } = 1;
 
         private bool _isFocused;
         public bool IsFocused

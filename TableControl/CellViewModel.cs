@@ -4,22 +4,22 @@ namespace WpfApp1
 {
     public class CellViewModel : CellViewModelBase
     {
-        private ColumnViewModel _columnViewModel;
+        private TableViewModel _tableViewModel;
 
-        public CellViewModel(ColumnViewModel columnViewModel)
+        public CellViewModel(TableViewModel tableViewModel)
         {
-            _columnViewModel = columnViewModel;
+            _tableViewModel = tableViewModel;
 
             UpCommand = new RelayCommand((o) =>
             {
-                IsFocused = false;
-                _columnViewModel.SetFocus(Column, Row - 1);
+                //IsFocused = false;
+                //_columnViewModel.SetFocus(Column, Row - 1);
             });
 
             DownCommand = new RelayCommand((o) =>
             {
-                IsFocused = false;
-                _columnViewModel.SetFocus(Column, Row + 1);
+                //IsFocused = false;
+                //_columnViewModel.SetFocus(Column, Row + 1);
             });
         }
 

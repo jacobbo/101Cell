@@ -1,6 +1,6 @@
 ﻿namespace WpfApp1
 {
-    public class ColumnSplitterViewModel : ColumnViewModelBase
+    public class ColumnSplitterViewModel : CellViewModelBase
     {
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace WpfApp1
 {
@@ -17,5 +18,13 @@ namespace WpfApp1
                 }
             }
         }
+
+        //public void RaisePropertyChanged()
+        //{
+        //    foreach (var row in Rows.OfType<CellViewModel>())
+        //    {
+        //        row.RaisePropertyChanged();
+        //    }
+        //}
     }
 }

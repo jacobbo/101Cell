@@ -2,10 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:WpfApp1">
     <DataTemplate x:Key="ColumnSplitterTemplate">
-        <local:SimpleGridSplitter Grid.Column="{Binding ColumnIndex}"
+        <local:SimpleGridSplitter Grid.Column="{Binding Column}"
                                       Grid="{Binding Path=., RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
-                          Width="2" HorizontalAlignment="Stretch" 
-                                  ResizeBehavior="BasedOnAlignment" ResizeDirection="Auto"/>
+                          Width="2" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
     </DataTemplate>
 
     <DataTemplate x:Key="ColumnHeaderTemplate">
@@ -13,9 +12,8 @@
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
     </DataTemplate>
 
-    <DataTemplate x:Key="RowTemplate">
-        <Border BorderThickness="0, 1" BorderBrush="OrangeRed"
-                >
+    <DataTemplate x:Key="CellTemplate">
+        <Border BorderThickness="0, 1">
             <TextBox Text="{Binding Text}"
                          TextAlignment="Center"
                          local:FocusExtensions.IsFocused="{Binding IsFocused}">
@@ -37,40 +35,64 @@
                     </Style>
                     </TextBox.Style>
             </TextBox>
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="OrangeRed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsFocused}" Value="True">
+                            <Setter Property="BorderBrush" Value="Black" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
         </Border>
     </DataTemplate>
 
-    <local:RowTemplateSelector x:Key="RowTemplateSelector"
+    <!--<local:RowTemplateSelector x:Key="RowTemplateSelector"
                                               ColumnHeaderTemplate="{StaticResource ColumnHeaderTemplate}"
-                                              RowTemplate="{StaticResource RowTemplate}" />
+                                              RowTemplate="{StaticResource RowTemplate}" />-->
 
-    <DataTemplate x:Key="ColumnTemplate">
+    <!--<DataTemplate x:Key="ColumnTemplate">
         <ItemsControl Margin="0" ItemsSource="{Binding Rows}"
                           ItemTemplateSelector="{StaticResource RowTemplateSelector}">
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
+                    --><!--<VirtualizingStackPanel />--><!--
+                    <Grid local:GridExtensions.StarRows="{Binding StarRows}"
+                        local:GridExtensions.RowCount="{Binding RowCount}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
-        </ItemsControl>
-    </DataTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding RowIndex}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
 
-    <local:ColumnTemplateSelector x:Key="ColumnTemplateSelector"
+        </ItemsControl>
+    </DataTemplate>-->
+
+    <local:CellTemplateSelector x:Key="CellTemplateSelector"
                                               ColumnSplitterTemplate="{StaticResource ColumnSplitterTemplate}"
-                                              ColumnTemplate="{StaticResource ColumnTemplate}" />
+                                              ColumnHeaderTemplate="{StaticResource ColumnHeaderTemplate}"
+                                              CellTemplate="{StaticResource CellTemplate}" />
 
     <DataTemplate DataType="{x:Type local:TableViewModel}">
-        <ItemsControl Margin="5" ItemsSource="{Binding Columns}"                      
-                       ItemTemplateSelector="{StaticResource ColumnTemplateSelector}">
+        <DataTemplate.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </DataTemplate.Resources>
+        <ItemsControl Margin="5" ItemsSource="{Binding Cells}"
+                      Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                       ItemTemplateSelector="{StaticResource CellTemplateSelector}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
 
                     <Grid local:GridExtensions.StarColumns="{Binding StarColumns}"
                         local:GridExtensions.ColumnCount="{Binding ColumnCount}"
                           local:GridExtensions.SharedSizeGroups="{Binding SharedSizeGroups}"
-                        />
+                        local:GridExtensions.StarRows="{Binding StarRows}"
+                        local:GridExtensions.RowCount="{Binding RowCount}"/>
 
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
@@ -78,15 +100,23 @@
             <ItemsControl.Template>
                 <ControlTemplate TargetType="ItemsControl">
                     <Border BorderThickness="1" BorderBrush="DarkGreen">
-                        <ItemsPresenter/>
-
+                        <ItemsPresenter>
+                            <ItemsPresenter.LayoutTransform>
+                                <ScaleTransform CenterX="0" CenterY="0"
+                                                ScaleX="{Binding Zoom}" ScaleY="{Binding Zoom}"/>
+                            </ItemsPresenter.LayoutTransform>
+                        </ItemsPresenter>
                     </Border>
                 </ControlTemplate>
             </ItemsControl.Template>
 
             <ItemsControl.ItemContainerStyle>
                 <Style>
-                    <Setter Property="Grid.Column" Value="{Binding ColumnIndex}"/>
+                   
+                    <Setter Property="Grid.Column" Value="{Binding Column}"/>
+                    <Setter Property="Grid.ColumnSpan" Value="{Binding ColumnSpan}" />
+                    <Setter Property="Grid.Row" Value="{Binding Row}"/>
+                    <Setter Property="Grid.RowSpan" Value="{Binding RowSpan}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
 

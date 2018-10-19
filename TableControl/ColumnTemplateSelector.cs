@@ -4,11 +4,13 @@ using System.Windows.Controls;
 
 namespace WpfApp1
 {
-    public class ColumnTemplateSelector : DataTemplateSelector
+    public class CellTemplateSelector : DataTemplateSelector
     {
         public DataTemplate ColumnSplitterTemplate { get; set; }
 
-        public DataTemplate ColumnTemplate { get; set; }
+        public DataTemplate ColumnHeaderTemplate { get; set; }
+
+        public DataTemplate CellTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -16,8 +18,12 @@ namespace WpfApp1
             {
                 return ColumnSplitterTemplate;
             }
+            else if (item is ColumnHeaderViewModel)
+            {
+                return ColumnHeaderTemplate;
+            }
 
-            return ColumnTemplate;
+            return CellTemplate;
         }
     }
 }

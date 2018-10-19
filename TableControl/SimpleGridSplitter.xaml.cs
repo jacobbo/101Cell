@@ -477,7 +477,7 @@ namespace WpfApp1
             }
 
             var newLeftColumnActualWidth = leftColumnActualWidth + deltaX;
-            var newRightColumnActualWidth = rightColumnActualWidth - deltaX;
+            var newRightColumnActualWidth = rightColumnActualWidth/* - deltaX*/;
 
             grid.BeginInit();
 
