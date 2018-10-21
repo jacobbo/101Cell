@@ -70,6 +70,7 @@
     </ApplicationDefinition>
     <Compile Include="CellData.cs" />
     <Compile Include="CellDataService.cs" />
+    <Compile Include="SimpleGrid.cs" />
     <Compile Include="TableControl\CellViewModelBase.cs" />
     <Compile Include="TableControl\ColumnSplitterViewModel.cs" />
     <Compile Include="TableControl\ColumnTemplateSelector.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="TableControl\SimpleGridSplitter.xaml.cs">
       <DependentUpon>SimpleGridSplitter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TableControl\TableResourceDictionary.cs" />
     <Compile Include="TableControl\TableViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

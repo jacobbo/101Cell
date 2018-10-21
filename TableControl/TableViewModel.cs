@@ -123,6 +123,13 @@ namespace WpfApp1
             set { SetField(ref _zoom, value); }
         }
 
+        private bool _isLayoutSuppressed;
+        public bool IsLayoutSuppressed
+        {
+            get { return _isLayoutSuppressed; }
+            set { SetField(ref _isLayoutSuppressed, value); }
+        }
+
         //public void RaisePropertyChanged()
         //{
         //    foreach (var column in Columns.OfType<ColumnViewModel>())

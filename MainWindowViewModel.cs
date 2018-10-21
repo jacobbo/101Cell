@@ -27,15 +27,15 @@ namespace WpfApp1
             //foreach (var cellData in data)
                 {
 
-
+                    TableViewModel1.IsLayoutSuppressed = true;
                 foreach (var cell in TableViewModel1.Cells
                         .OfType<CellViewModel>()
-                        .Where(c => c.Column % _random.Next(3, 9) == 0))
+                        /*.Where(c => c.Column % _random.Next(3, 9) == 0)*/)
                 {
                     bool found = false;
                     //foreach (var cell in column.Rows.OfType<CellViewModel>())
                     {
-                        if (_random.Next(1, 10) % 3 == 0)
+                        //if (_random.Next(1, 10) % 3 == 0)
                         {
                             cell.Text = _random.Next(1, 999).ToString();
                             found = true;
@@ -48,9 +48,10 @@ namespace WpfApp1
                     //    break;
                     //}
                 }
+                    TableViewModel1.IsLayoutSuppressed = false;
 
 
-                //TableViewModel1.RaisePropertyChanged();
+                    //TableViewModel1.RaisePropertyChanged();
 
 
 
@@ -85,7 +86,7 @@ namespace WpfApp1
         {
             
 
-            TableViewModel1 = new TableViewModel(81, 60);
+            TableViewModel1 = new TableViewModel(1, 3);
 
             TableViewModel2 = new TableViewModel(101, 50);
 

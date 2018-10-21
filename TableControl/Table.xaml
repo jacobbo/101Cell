@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:WpfApp1">
+                    xmlns:local="clr-namespace:WpfApp1"
+                    x:Class="WpfApp1.TableControl.TableResourceDictionary"
+                    x:ClassModifier="public">
     <DataTemplate x:Key="ColumnSplitterTemplate">
         <local:SimpleGridSplitter Grid.Column="{Binding Column}"
                                       Grid="{Binding Path=., RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
@@ -88,7 +90,9 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
 
-                    <Grid local:GridExtensions.StarColumns="{Binding StarColumns}"
+                    <Grid LayoutUpdated="HandleLayoutUpdated" 
+                                      
+                                      local:GridExtensions.StarColumns="{Binding StarColumns}"
                         local:GridExtensions.ColumnCount="{Binding ColumnCount}"
                           local:GridExtensions.SharedSizeGroups="{Binding SharedSizeGroups}"
                         local:GridExtensions.StarRows="{Binding StarRows}"
