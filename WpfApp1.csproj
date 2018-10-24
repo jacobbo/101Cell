@@ -70,12 +70,19 @@
     </ApplicationDefinition>
     <Compile Include="CellData.cs" />
     <Compile Include="CellDataService.cs" />
+    <Compile Include="TableControl\NameToBrushConverter.cs" />
+    <Compile Include="ColorDialog\ColorDialog.xaml.cs">
+      <DependentUpon>ColorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ColorDialog\ColorDialogViewModel.cs" />
+    <Compile Include="ColorDialog\ColorInfo.cs" />
     <Compile Include="SimpleGrid.cs" />
     <Compile Include="TableControl\CellViewModelBase.cs" />
     <Compile Include="TableControl\ColumnSplitterViewModel.cs" />
     <Compile Include="TableControl\ColumnTemplateSelector.cs" />
     <Compile Include="TableControl\ColumnViewModel.cs" />
     <Compile Include="TableControl\ColumnViewModelBase.cs" />
+    <Compile Include="TableControl\ContextActionViewModel.cs" />
     <Compile Include="TableControl\FocusExtensions.cs" />
     <Compile Include="TableControl\GridExtensions.cs" />
     <Compile Include="NotifyPropertyChangedBase.cs" />
@@ -89,6 +96,10 @@
     </Compile>
     <Compile Include="TableControl\TableResourceDictionary.cs" />
     <Compile Include="TableControl\TableViewModel.cs" />
+    <Page Include="ColorDialog\ColorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

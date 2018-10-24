@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace WpfApp1
@@ -15,30 +16,22 @@ namespace WpfApp1
 
         void UpdateGrid(/*IEnumerable<CellModel> data*/)
         {
-            foreach (var i in Enumerable.Range(0, 10000))
-            {
-                var s = _random.Next(1, 999).ToString().ToUpper();
+            return;
+            //foreach (var i in Enumerable.Range(0, 10000))
+            //{
+            //    var s = _random.Next(1, 999).ToString().ToUpper();
 
-            }
-            //using (var d = Dispatcher.CurrentDispatcher.DisableProcessing())
-            {
-                /* your work... Use dispacher.begininvoke... */
-            
-            //foreach (var cellData in data)
-                {
+            //}
 
-                    TableViewModel1.IsLayoutSuppressed = true;
+
                 foreach (var cell in TableViewModel1.Cells
-                        .OfType<CellViewModel>()
-                        /*.Where(c => c.Column % _random.Next(3, 9) == 0)*/)
+                        .OfType<CellViewModel>())
                 {
-                    bool found = false;
                     //foreach (var cell in column.Rows.OfType<CellViewModel>())
                     {
-                        //if (_random.Next(1, 10) % 3 == 0)
+                        //if (_random.Next(1, 11) % 4 == 0)
                         {
-                            cell.Text = _random.Next(1, 999).ToString();
-                            found = true;
+                            cell.Text = _random.Next(1, 3).ToString();
                             //break;
                         }
                     }
@@ -48,53 +41,56 @@ namespace WpfApp1
                     //    break;
                     //}
                 }
-                    TableViewModel1.IsLayoutSuppressed = false;
 
 
                     //TableViewModel1.RaisePropertyChanged();
 
 
 
-                    foreach (var cell in TableViewModel2.Cells
-                        .OfType<CellViewModel>()
-                        .Where(c => c.Column == 31))
-                    {
-                //    bool found = false;
-                //    foreach (var cell in column.Rows.OfType<CellViewModel>())
+                //    foreach (var cell in TableViewModel2.Cells
+                //        .OfType<CellViewModel>()
+                //        .Where(c => c.Column == 31))
                 //    {
-                //        //if (cell.Column == cellData.Column &&
-                //        //    cell.Row == cellData.Row)
-                //        {
-                            cell.Text = _random.Next(1, 3).ToString();
-                //            found = true;
-                //            //break;
-                //        }
-                //    }
+                ////    bool found = false;
+                ////    foreach (var cell in column.Rows.OfType<CellViewModel>())
+                ////    {
+                ////        //if (cell.Column == cellData.Column &&
+                ////        //    cell.Row == cellData.Row)
+                ////        {
+                //            cell.Text = _random.Next(1, 3).ToString();
+                ////            found = true;
+                ////            //break;
+                ////        }
+                ////    }
 
-                //    //if (found)
-                //    //{
-                //    //    break;
-                //    //}
-                }
+                ////    //if (found)
+                ////    //{
+                ////    //    break;
+                ////    //}
+                //}
 
                     //TableViewModel2.RaisePropertyChanged();
-                }
-            }
+
         }
 
         public MainWindowViewModel()
         {
             
 
-            TableViewModel1 = new TableViewModel(1, 3);
+            TableViewModel1 = new TableViewModel(11, 10);
 
             TableViewModel2 = new TableViewModel(101, 50);
 
-            var dataService = new CellDataService
+            RefreshCommand = new RelayCommand(o =>
             {
-                ColumnCount = 101,
-                RowCount = 50
-            };
+                TableViewModel1 = new TableViewModel(101, 50);
+            });
+
+            //var dataService = new CellDataService
+            //{
+            //    ColumnCount = 101,
+            //    RowCount = 50
+            //};
 
             //var data = dataService.GetData(TimeSpan.FromMilliseconds(500));
             var interval = Observable.Interval(TimeSpan.FromMilliseconds(500));
@@ -140,6 +136,8 @@ namespace WpfApp1
             get { return _tableViewModel2; }
             set { SetField(ref _tableViewModel2, value); }
         }
+
+        public ICommand RefreshCommand { get; }
 
         public void Dispose()
         {

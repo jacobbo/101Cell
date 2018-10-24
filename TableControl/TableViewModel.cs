@@ -116,26 +116,102 @@ namespace WpfApp1
             set { SetField(ref _sharedSizeGroups, value); }
         }
 
-        private double _zoom = 0.5;
+        private double _zoom = 1.50;
         public double Zoom
         {
             get { return _zoom; }
             set { SetField(ref _zoom, value); }
         }
 
-        private bool _isLayoutSuppressed;
-        public bool IsLayoutSuppressed
+        //private bool _isLayoutSuppressed;
+        //public bool IsLayoutSuppressed
+        //{
+        //    get { return _isLayoutSuppressed; }
+        //    set { SetField(ref _isLayoutSuppressed, value); }
+        //}
+
+        private string DefaultCellBackground = "White";
+
+        public void SelectCell(int column, int row, bool isMultiSelection = false)
         {
-            get { return _isLayoutSuppressed; }
-            set { SetField(ref _isLayoutSuppressed, value); }
+            if (column < 0 || column >= ColumnCount || row < 0 || row >= RowCount)
+            {
+                return;
+            }
+
+            foreach (var cell in Cells.OfType<CellViewModel>())
+            {
+                if (cell.Column == column && cell.Row == row)
+                {
+                    cell.IsFocused = true;
+                    cell.IsSelected = true;
+                    cell.IsHighlighted = false;
+                }
+                else if (cell.Row == row)
+                {
+                    cell.IsFocused = false;
+                    cell.IsSelected = cell.IsSelected && isMultiSelection;
+                    cell.IsHighlighted = true;
+                }
+                else
+                {
+                    cell.IsFocused = false;
+                    cell.IsSelected = cell.IsSelected && isMultiSelection;
+                    cell.IsHighlighted = cell.IsHighlighted && isMultiSelection;
+                }
+            }
         }
 
-        //public void RaisePropertyChanged()
+        public void SelectRectangularBlockOfCells(int column, int row)
+        {
+            if (column < 0 || column >= ColumnCount || row < 0 || row >= RowCount)
+            {
+                return;
+            }
+
+            int minColumn = column;
+            int maxColumn = column;
+            int minRow = row;
+            int maxRow = row;
+
+            foreach (var cell in Cells.OfType<CellViewModel>().Where(c => c.IsSelected))
+            {
+                minColumn = cell.Column < minColumn ? cell.Column : minColumn;
+                maxColumn = cell.Column > maxColumn ? cell.Column : maxColumn;
+                minRow = cell.Row < minRow ? cell.Row : minRow;
+                maxRow = cell.Row > maxRow ? cell.Row : maxRow;
+            }
+
+            foreach (var cell in Cells.OfType<CellViewModel>())
+            {
+                if (cell.Row >= minRow && cell.Row <= maxRow)
+                {
+                    cell.IsHighlighted = true;
+
+                    if (cell.Column >= minColumn && cell.Column <= maxColumn)
+                    {
+                        cell.IsSelected = true;
+
+                        if (cell.Column == column && cell.Row == row)
+                        {
+                            cell.IsFocused = true;
+                        }
+                    }
+                }
+                
+            }
+        }
+
+        //public void ClearFocus()
         //{
-        //    foreach (var column in Columns.OfType<ColumnViewModel>())
+        //    foreach (var cell in Cells.OfType<CellViewModel>())
         //    {
-        //        column.RaisePropertyChanged();
+        //        cell.IsFocused = false;
+        //        cell.IsSelected = false;
         //    }
         //}
+
+
+
     }
 }
