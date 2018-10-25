@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -16,7 +17,10 @@ namespace WpfApp1
 
         void UpdateGrid(/*IEnumerable<CellModel> data*/)
         {
-            return;
+            if (TableViewModel1 == null)
+            {
+                return;
+            }
             //foreach (var i in Enumerable.Range(0, 10000))
             //{
             //    var s = _random.Next(1, 999).ToString().ToUpper();
@@ -77,13 +81,19 @@ namespace WpfApp1
         {
             
 
-            TableViewModel1 = new TableViewModel(11, 10);
+            //TableViewModel1 = new TableViewModel(11, 10);
 
             TableViewModel2 = new TableViewModel(101, 50);
 
             RefreshCommand = new RelayCommand(o =>
             {
-                TableViewModel1 = new TableViewModel(101, 50);
+                IsLoading = true;
+
+                Dispatcher.CurrentDispatcher.Invoke(() => { TableViewModel1 = new TableViewModel(101, 50); }, DispatcherPriority.ContextIdle);
+
+                
+
+                Dispatcher.CurrentDispatcher.Invoke(() => { IsLoading = false; }, DispatcherPriority.ContextIdle);
             });
 
             //var dataService = new CellDataService
@@ -121,6 +131,13 @@ namespace WpfApp1
             //        s.OnNext(row);
             //    }
             //});
+        }
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { SetField(ref _isLoading, value); }
         }
 
         private TableViewModel _tableViewModel1;

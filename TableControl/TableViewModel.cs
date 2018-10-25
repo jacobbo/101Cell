@@ -116,7 +116,7 @@ namespace WpfApp1
             set { SetField(ref _sharedSizeGroups, value); }
         }
 
-        private double _zoom = 1.50;
+        private double _zoom = .50;
         public double Zoom
         {
             get { return _zoom; }
