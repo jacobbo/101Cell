@@ -15,22 +15,22 @@ namespace WpfApp1
         {
             _tableViewModel = tableViewModel;
 
-            UpCommand = new RelayCommand(o =>
+            UpKeyCommand = new RelayCommand(o =>
             {
                 _tableViewModel.SelectCell(Column, Row - 1);
             });
 
-            DownCommand = new RelayCommand(o =>
+            DownKeyCommand = new RelayCommand(o =>
             {
                 _tableViewModel.SelectCell(Column, Row + 1);
             });
 
-            RightCommand = new RelayCommand(o =>
+            RightKeyCommand = new RelayCommand(o =>
             {
                 _tableViewModel.SelectCell(Column + 2, Row);
             });
 
-            LeftCommand = new RelayCommand(o =>
+            LeftKeyCommand = new RelayCommand(o =>
             {
                 _tableViewModel.SelectCell(Column - 2, Row);
             });
@@ -98,6 +98,13 @@ namespace WpfApp1
             }
         }
 
+        private bool _isEditMode;
+        public bool IsEditMode
+        {
+            get { return _isEditMode; }
+            set { SetField(ref _isEditMode, value); }
+        }
+
         private bool _isUp;
         public bool IsUp
         {
@@ -126,13 +133,13 @@ namespace WpfApp1
             set { SetField(ref _isHighlighted, value); }
         }
 
-        public ICommand UpCommand { get; }
+        public ICommand UpKeyCommand { get; }
 
-        public ICommand DownCommand { get; }
+        public ICommand DownKeyCommand { get; }
 
-        public ICommand RightCommand { get; }
+        public ICommand RightKeyCommand { get; }
 
-        public ICommand LeftCommand { get; }
+        public ICommand LeftKeyCommand { get; }
 
         public ICommand SelectCellCommand { get; }
 

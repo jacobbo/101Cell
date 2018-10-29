@@ -116,7 +116,7 @@ namespace WpfApp1
             set { SetField(ref _sharedSizeGroups, value); }
         }
 
-        private double _zoom = .50;
+        private double _zoom = .5;
         public double Zoom
         {
             get { return _zoom; }
@@ -143,18 +143,21 @@ namespace WpfApp1
             {
                 if (cell.Column == column && cell.Row == row)
                 {
+                    cell.IsEditMode = true;
                     cell.IsFocused = true;
                     cell.IsSelected = true;
                     cell.IsHighlighted = false;
                 }
                 else if (cell.Row == row)
                 {
+                    cell.IsEditMode = false;
                     cell.IsFocused = false;
                     cell.IsSelected = cell.IsSelected && isMultiSelection;
                     cell.IsHighlighted = true;
                 }
                 else
                 {
+                    cell.IsEditMode = false;
                     cell.IsFocused = false;
                     cell.IsSelected = cell.IsSelected && isMultiSelection;
                     cell.IsHighlighted = cell.IsHighlighted && isMultiSelection;

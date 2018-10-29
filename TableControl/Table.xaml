@@ -7,16 +7,20 @@
     
     <tableControl:NameToBrushConverter x:Key="NameToBrushConverter"/>
 
+    <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <local:BooleanToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible"
+        x:Key="InvertedBooleanToVisibilityConverter"/>
+
     <Style TargetType="{x:Type TextBox}" x:Key="CellTextBox">
         <Setter Property="Background" Value="{Binding Background,
             Converter={StaticResource NameToBrushConverter}}"/>
         <!--<Setter Property="BorderBrush" Value="Gray"/>-->
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <!-- Modify default template, to change triggers -->
                 <ControlTemplate TargetType="{x:Type TextBoxBase}">
-                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                         <ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -61,6 +65,27 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="{x:Type TextBlock}" x:Key="CellTextBlock">
+        <Setter Property="Background" Value="{Binding Background,
+            Converter={StaticResource NameToBrushConverter}}"/>
+        <!--<Setter Property="BorderBrush" Value="Gray"/>-->
+         
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsUp}" Value="True">
+                <Setter Property="Background" Value="LightGreen" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsDown}" Value="True">
+                <Setter Property="Background" Value="Tomato" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                <Setter Property="Background" Value="LightCyan" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsValueStale}" Value="True">
+                <Setter Property="Background" Value="LightCoral" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <DataTemplate x:Key="ColumnSplitterTemplate">
         <local:SimpleGridSplitter Grid.Column="{Binding Column}"
                                  
@@ -74,13 +99,82 @@
     </DataTemplate>
 
     <DataTemplate x:Key="CellTemplate">
+        <Border BorderThickness="1" BorderBrush="Gray">
+            <Grid>
+                <TextBlock Style="{StaticResource CellTextBlock}" Text="{Binding Text}"
+                   Visibility="{Binding IsEditMode, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
+                         TextAlignment="Center"                     
+                         local:FocusExtensions.IsFocused="{Binding IsFocused}">
+            <TextBlock.ContextMenu>
+                <ContextMenu ItemsSource="{Binding Actions}">
+                    <ContextMenu.ItemTemplate >
+                        <DataTemplate DataType="{x:Type MenuItem}">
+                            <MenuItem Header="{Binding Name}" Command="{Binding Action}"/>
+                        </DataTemplate>
+                    </ContextMenu.ItemTemplate>
+                </ContextMenu>
+            </TextBlock.ContextMenu>
+            <TextBlock.InputBindings>
+                <KeyBinding Key="Up" Command="{Binding UpKeyCommand}" />
+                <KeyBinding Key="Down" Command="{Binding DownKeyCommand}" />
+                <KeyBinding Key="Right" Command="{Binding RightKeyCommand}" />
+                <KeyBinding Key="Left" Command="{Binding LeftKeyCommand}" />
+                <MouseBinding Command="{Binding SelectCellCommand}" Gesture="LeftClick" />
+                <MouseBinding Command="{Binding SelectCellCommand}" Gesture="RightClick" />
+                <MouseBinding Command="{Binding SelectNonAdjacentCellsCommand}" Gesture="Ctrl+LeftClick" />
+                <MouseBinding Command="{Binding SelectRectangularBlockOfCellsCommand}" Gesture="Shift+LeftClick" />
+            </TextBlock.InputBindings>
+            <!--<TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Setter Property="Background" Value="White"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsUp}" Value="True">
+                                <Setter Property="TextBox.Background" Value="LightGreen" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsDown}" Value="True">
+                                <Setter Property="TextBox.Background" Value="Tomato" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    </TextBox.Style>-->
+        </TextBlock>
+                <TextBox Style="{StaticResource CellTextBox}" Text="{Binding Text}"
+                         Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                         TextAlignment="Center"                     
+                         local:FocusExtensions.IsFocused="{Binding IsFocused}">
+                    <TextBox.ContextMenu>
+                        <ContextMenu ItemsSource="{Binding Actions}">
+                            <ContextMenu.ItemTemplate >
+                                <DataTemplate DataType="{x:Type MenuItem}">
+                                    <MenuItem Header="{Binding Name}" Command="{Binding Action}"/>
+                                </DataTemplate>
+                            </ContextMenu.ItemTemplate>
+                        </ContextMenu>
+                    </TextBox.ContextMenu>
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Up" Command="{Binding UpKeyCommand}" />
+                        <KeyBinding Key="Down" Command="{Binding DownKeyCommand}" />
+                        <KeyBinding Key="Right" Command="{Binding RightKeyCommand}" />
+                        <KeyBinding Key="Left" Command="{Binding LeftKeyCommand}" />
+                        <KeyBinding Key="Enter" Command="{Binding DownKeyCommand}" />
+                        <MouseBinding Command="{Binding SelectCellCommand}" Gesture="LeftClick" />
+                        <MouseBinding Command="{Binding SelectCellCommand}" Gesture="RightClick" />
+                        <MouseBinding Command="{Binding SelectNonAdjacentCellsCommand}" Gesture="Ctrl+LeftClick" />
+                        <MouseBinding Command="{Binding SelectRectangularBlockOfCellsCommand}" Gesture="Shift+LeftClick" />
+                    </TextBox.InputBindings>
+                </TextBox>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <!--<DataTemplate x:Key="CellTemplate">
             <TextBox Style="{StaticResource CellTextBox}" Text="{Binding Text}"
                          TextAlignment="Center"
                      
                          local:FocusExtensions.IsFocused="{Binding IsFocused}">
                 <TextBox.ContextMenu>
                 <ContextMenu ItemsSource="{Binding Actions}">
-                    <!--<ContextMenu.Template>
+                    --><!--<ContextMenu.Template>
                         <ControlTemplate>
                             <ItemsControl ItemsSource="{Binding Actions}">
                                 <ItemsControl.ItemTemplate>
@@ -93,7 +187,7 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </ControlTemplate>
-                    </ContextMenu.Template>-->
+                    </ContextMenu.Template>--><!--
                     
                     <ContextMenu.ItemTemplate >
                         <DataTemplate DataType="{x:Type MenuItem}">
@@ -112,7 +206,7 @@
                 <MouseBinding Command="{Binding SelectNonAdjacentCellsCommand}" Gesture="Ctrl+LeftClick" />
                 <MouseBinding Command="{Binding SelectRectangularBlockOfCellsCommand}" Gesture="Shift+LeftClick" />
             </TextBox.InputBindings>
-                <!--<TextBox.Style>
+                --><!--<TextBox.Style>
                     <Style TargetType="{x:Type TextBox}">
                         <Setter Property="Background" Value="White"/>
                         <Style.Triggers>
@@ -124,9 +218,9 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                    </TextBox.Style>-->
+                    </TextBox.Style>--><!--
             </TextBox>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <local:CellTemplateSelector x:Key="CellTemplateSelector"
                                               ColumnSplitterTemplate="{StaticResource ColumnSplitterTemplate}"

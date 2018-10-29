@@ -17,6 +17,7 @@ namespace WpfApp1
 
         void UpdateGrid(/*IEnumerable<CellModel> data*/)
         {
+            
             if (TableViewModel1 == null)
             {
                 return;
@@ -83,17 +84,21 @@ namespace WpfApp1
 
             //TableViewModel1 = new TableViewModel(11, 10);
 
-            TableViewModel2 = new TableViewModel(101, 50);
+            TableViewModel2 = new TableViewModel(21, 10);
 
             RefreshCommand = new RelayCommand(o =>
             {
                 IsLoading = true;
 
-                Dispatcher.CurrentDispatcher.Invoke(() => { TableViewModel1 = new TableViewModel(101, 50); }, DispatcherPriority.ContextIdle);
+                Dispatcher.CurrentDispatcher.Invoke(() =>
+                {
+                    TableViewModel1 = new TableViewModel(101, 50);
+                }, DispatcherPriority.ContextIdle);                
 
-                
-
-                Dispatcher.CurrentDispatcher.Invoke(() => { IsLoading = false; }, DispatcherPriority.ContextIdle);
+                Dispatcher.CurrentDispatcher.Invoke(() => 
+                {
+                    IsLoading = false;
+                }, DispatcherPriority.ContextIdle);
             });
 
             //var dataService = new CellDataService
