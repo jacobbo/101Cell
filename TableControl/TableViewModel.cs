@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using WpfApp1.TableControl;
 
 namespace WpfApp1
 {
@@ -28,9 +29,13 @@ namespace WpfApp1
                         {
                             cell = new ColumnHeaderViewModel { Text = $"Column{i + 1}" };
                         }
+                        else if (j % 4 == 0)
+                        {
+                            cell = new SeparatorViewModel {ColumnSpan = ColumnCount};
+                        }
                         else
                         {
-                            cell = new CellViewModel(this) { Column = i, Row = j, Text = $"{{{i}, {j}}}" };
+                            cell = new CellViewModel(this) { Text = $"{{{i}, {j}}}" };
                         }
 
                         cell.Column = i;
@@ -116,7 +121,7 @@ namespace WpfApp1
             set { SetField(ref _sharedSizeGroups, value); }
         }
 
-        private double _zoom = .5;
+        private double _zoom = 1.5;
         public double Zoom
         {
             get { return _zoom; }

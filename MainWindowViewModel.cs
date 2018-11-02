@@ -22,21 +22,21 @@ namespace WpfApp1
             {
                 return;
             }
-            //foreach (var i in Enumerable.Range(0, 10000))
-            //{
-            //    var s = _random.Next(1, 999).ToString().ToUpper();
+            foreach (var i in Enumerable.Range(0, 10000))
+            {
+                var s = _random.Next(1, 999).ToString().ToUpper();
 
-            //}
+            }
 
 
-                foreach (var cell in TableViewModel1.Cells
+            foreach (var cell in TableViewModel1.Cells
                         .OfType<CellViewModel>())
                 {
                     //foreach (var cell in column.Rows.OfType<CellViewModel>())
                     {
-                        //if (_random.Next(1, 11) % 4 == 0)
+                        if (cell.Column % 3 == 0 && cell.Row % 3 == 0)
                         {
-                            cell.Text = _random.Next(1, 3).ToString();
+                            cell.Text = _random.Next(1, 999).ToString();
                             //break;
                         }
                     }
@@ -84,7 +84,7 @@ namespace WpfApp1
 
             //TableViewModel1 = new TableViewModel(11, 10);
 
-            TableViewModel2 = new TableViewModel(21, 10);
+            //TableViewModel2 = new TableViewModel(101, 50);
 
             RefreshCommand = new RelayCommand(o =>
             {
@@ -92,13 +92,9 @@ namespace WpfApp1
 
                 Dispatcher.CurrentDispatcher.Invoke(() =>
                 {
-                    TableViewModel1 = new TableViewModel(101, 50);
-                }, DispatcherPriority.ContextIdle);                
-
-                Dispatcher.CurrentDispatcher.Invoke(() => 
-                {
+                    TableViewModel1 = new TableViewModel(11, 17);
                     IsLoading = false;
-                }, DispatcherPriority.ContextIdle);
+                }, DispatcherPriority.ContextIdle);                
             });
 
             //var dataService = new CellDataService
