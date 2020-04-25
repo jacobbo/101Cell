@@ -36,7 +36,7 @@ namespace WpfApp1
                     {
                         //if (_random.Next(1, 11) % 4 == 0)
                         {
-                            cell.Text = _random.Next(1, 3).ToString();
+                            //cell.Text = _random.Next(1, 99).ToString();
                             //break;
                         }
                     }
@@ -92,7 +92,8 @@ namespace WpfApp1
 
                 Dispatcher.CurrentDispatcher.Invoke(() =>
                 {
-                    TableViewModel1 = new TableViewModel(101, 50);
+                    TableViewModel1 = new TableViewModel(31, 61);
+                    TableViewModel1.IsLayoutSuppressed = false;
                 }, DispatcherPriority.ContextIdle);                
 
                 Dispatcher.CurrentDispatcher.Invoke(() => 
@@ -108,7 +109,7 @@ namespace WpfApp1
             //};
 
             //var data = dataService.GetData(TimeSpan.FromMilliseconds(500));
-            var interval = Observable.Interval(TimeSpan.FromMilliseconds(500));
+            var interval = Observable.Interval(TimeSpan.FromMilliseconds(1000));
 
             _token = interval//.ObserveOn(TaskPoolScheduler.Default)
                 .Subscribe((l) => UpdateGrid());

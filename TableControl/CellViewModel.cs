@@ -17,12 +17,12 @@ namespace WpfApp1
 
             UpKeyCommand = new RelayCommand(o =>
             {
-                _tableViewModel.SelectCell(Column, Row - 1);
+                _tableViewModel.SelectCell(Column, Row - 2);
             });
 
             DownKeyCommand = new RelayCommand(o =>
             {
-                _tableViewModel.SelectCell(Column, Row + 1);
+                _tableViewModel.SelectCell(Column, Row + 2);
             });
 
             RightKeyCommand = new RelayCommand(o =>

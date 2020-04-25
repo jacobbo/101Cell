@@ -11,11 +11,25 @@
     <local:BooleanToVisibilityConverter TrueValue="Collapsed" FalseValue="Visible"
         x:Key="InvertedBooleanToVisibilityConverter"/>
 
+    <Style TargetType="{x:Type Border}" x:Key="CellBorder">
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <!--<Setter Property="Panel.ZIndex" Value="0"/>-->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Margin" Value="-2"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="{x:Type TextBox}" x:Key="CellTextBox">
         <Setter Property="Background" Value="{Binding Background,
             Converter={StaticResource NameToBrushConverter}}"/>
         <!--<Setter Property="BorderBrush" Value="Gray"/>-->
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CaretBrush" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
                 <!-- Modify default template, to change triggers -->
@@ -44,39 +58,40 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsUp}" Value="True">
+            <!--<DataTrigger Binding="{Binding IsUp}" Value="True">
                 <Setter Property="TextBox.Background" Value="LightGreen" />
             </DataTrigger>
             <DataTrigger Binding="{Binding IsDown}" Value="True">
                 <Setter Property="TextBox.Background" Value="Tomato" />
-            </DataTrigger>
+            </DataTrigger>-->
             <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                 <Setter Property="TextBox.IsReadOnly" Value="True" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                <Setter Property="TextBox.BorderBrush" Value="Black" />
-            </DataTrigger>
+            <!--<DataTrigger Binding="{Binding IsSelected}" Value="True">
+                <Setter Property="TextBox.Background" Value="LemonChiffon" />
+            </DataTrigger>-->
             <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
                 <Setter Property="TextBox.Background" Value="LightCyan" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding IsValueStale}" Value="True">
+            <!--<DataTrigger Binding="{Binding IsValueStale}" Value="True">
                 <Setter Property="TextBox.Background" Value="LightCoral" />
-            </DataTrigger>
+            </DataTrigger>-->
         </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type TextBlock}" x:Key="CellTextBlock">
         <Setter Property="Background" Value="{Binding Background,
             Converter={StaticResource NameToBrushConverter}}"/>
+        <Setter Property="Padding" Value="0 0 10, 0"/>
         <!--<Setter Property="BorderBrush" Value="Gray"/>-->
          
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsUp}" Value="True">
+            <!--<DataTrigger Binding="{Binding IsUp}" Value="True">
                 <Setter Property="Background" Value="LightGreen" />
             </DataTrigger>
             <DataTrigger Binding="{Binding IsDown}" Value="True">
                 <Setter Property="Background" Value="Tomato" />
-            </DataTrigger>
+            </DataTrigger>-->
             <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
                 <Setter Property="Background" Value="LightCyan" />
             </DataTrigger>
@@ -85,12 +100,20 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-
+    
     <DataTemplate x:Key="ColumnSplitterTemplate">
         <local:SimpleGridSplitter Grid.Column="{Binding Column}"
                                  
                                       Grid="{Binding Path=., RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
                           Width="1" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="RowSeparatorTemplate">
+        <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="1"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ColumnSeparatorTemplate">
+        <Rectangle VerticalAlignment="Stretch" Fill="Gray" Width="1"/>
     </DataTemplate>
 
     <DataTemplate x:Key="ColumnHeaderTemplate">
@@ -99,7 +122,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="CellTemplate">
-        <Border BorderThickness="1" BorderBrush="Gray">
+        <Border Style="{StaticResource CellBorder}">
             <Grid>
                 <TextBlock Style="{StaticResource CellTextBlock}" Text="{Binding Text}"
                    Visibility="{Binding IsEditMode, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
@@ -107,11 +130,12 @@
                          local:FocusExtensions.IsFocused="{Binding IsFocused}">
             <TextBlock.ContextMenu>
                 <ContextMenu ItemsSource="{Binding Actions}">
-                    <ContextMenu.ItemTemplate >
-                        <DataTemplate DataType="{x:Type MenuItem}">
-                            <MenuItem Header="{Binding Name}" Command="{Binding Action}"/>
-                        </DataTemplate>
-                    </ContextMenu.ItemTemplate>
+                    <ContextMenu.ItemContainerStyle >
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Name}" />
+                            <Setter Property="Command" Value="{Binding Action}" />
+                        </Style>
+                    </ContextMenu.ItemContainerStyle>
                 </ContextMenu>
             </TextBlock.ContextMenu>
             <TextBlock.InputBindings>
@@ -138,17 +162,27 @@
                     </Style>
                     </TextBox.Style>-->
         </TextBlock>
+                <Path Data="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"
+                      Fill="Red" Stretch="Uniform" Width="10" HorizontalAlignment="Right" Margin="2 0"
+                      VerticalAlignment="Center"
+                      Visibility="{Binding IsDown, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Path Data="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"
+                      Fill="Green" Stretch="Uniform" Width="10" HorizontalAlignment="Right" Margin="2 0"
+                      VerticalAlignment="Center"
+                      Visibility="{Binding IsUp, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                
                 <TextBox Style="{StaticResource CellTextBox}" Text="{Binding Text}"
                          Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}"
                          TextAlignment="Center"                     
                          local:FocusExtensions.IsFocused="{Binding IsFocused}">
                     <TextBox.ContextMenu>
                         <ContextMenu ItemsSource="{Binding Actions}">
-                            <ContextMenu.ItemTemplate >
-                                <DataTemplate DataType="{x:Type MenuItem}">
-                                    <MenuItem Header="{Binding Name}" Command="{Binding Action}"/>
-                                </DataTemplate>
-                            </ContextMenu.ItemTemplate>
+                            <ContextMenu.ItemContainerStyle >
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Header" Value="{Binding Name}" />
+                                    <Setter Property="Command" Value="{Binding Action}" />
+                                </Style>
+                            </ContextMenu.ItemContainerStyle>
                         </ContextMenu>
                     </TextBox.ContextMenu>
                     <TextBox.InputBindings>
@@ -163,6 +197,7 @@
                         <MouseBinding Command="{Binding SelectRectangularBlockOfCellsCommand}" Gesture="Shift+LeftClick" />
                     </TextBox.InputBindings>
                 </TextBox>
+            
             </Grid>
         </Border>
     </DataTemplate>
@@ -224,6 +259,8 @@
 
     <local:CellTemplateSelector x:Key="CellTemplateSelector"
                                               ColumnSplitterTemplate="{StaticResource ColumnSplitterTemplate}"
+                                ColumnSeparatorTemplate="{StaticResource ColumnSeparatorTemplate}"              
+                                RowSeparatorTemplate="{StaticResource RowSeparatorTemplate}"
                                               ColumnHeaderTemplate="{StaticResource ColumnHeaderTemplate}"
                                               CellTemplate="{StaticResource CellTemplate}" />
 
@@ -231,45 +268,52 @@
         <DataTemplate.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </DataTemplate.Resources>
-        <ItemsControl Margin="5" ItemsSource="{Binding Cells}"
+            <ItemsControl Margin="0" ItemsSource="{Binding Cells}"
                       Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       ItemTemplateSelector="{StaticResource CellTemplateSelector}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-
+                      ItemTemplateSelector="{StaticResource CellTemplateSelector}"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.CanContentScroll="true"
+                      ScrollViewer.PanningMode="Both">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
                     <Grid local:GridExtensions.StarColumns="{Binding StarColumns}"
                         local:GridExtensions.ColumnCount="{Binding ColumnCount}"
-                          local:GridExtensions.SharedSizeGroups="{Binding SharedSizeGroups}"
+                        local:GridExtensions.SharedSizeGroups="{Binding SharedSizeGroups}"
                         local:GridExtensions.StarRows="{Binding StarRows}"
-                        local:GridExtensions.RowCount="{Binding RowCount}"/>
+                        local:GridExtensions.RowCount="{Binding RowCount}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.Template>
-                <ControlTemplate TargetType="ItemsControl">
-                    <Border BorderThickness="1" BorderBrush="DarkGreen">
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                    <ScrollViewer>
                         <ItemsPresenter>
-                            <ItemsPresenter.LayoutTransform>
-                                <ScaleTransform CenterX="0" CenterY="0"
+                                <ItemsPresenter.LayoutTransform>
+                                    <ScaleTransform CenterX="0" CenterY="0"
                                                 ScaleX="{Binding Zoom}" ScaleY="{Binding Zoom}"/>
-                            </ItemsPresenter.LayoutTransform>
-                        </ItemsPresenter>
-                    </Border>
-                </ControlTemplate>
-            </ItemsControl.Template>
+                                </ItemsPresenter.LayoutTransform>
+                            </ItemsPresenter>
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
 
-            <ItemsControl.ItemContainerStyle>
-                <Style>
-                   
-                    <Setter Property="Grid.Column" Value="{Binding Column}"/>
-                    <Setter Property="Grid.ColumnSpan" Value="{Binding ColumnSpan}" />
-                    <Setter Property="Grid.Row" Value="{Binding Row}"/>
-                    <Setter Property="Grid.RowSpan" Value="{Binding RowSpan}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
 
-            <!--<Button Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                        <Setter Property="Grid.Column" Value="{Binding Column}"/>
+                        <Setter Property="Grid.ColumnSpan" Value="{Binding ColumnSpan}" />
+                        <Setter Property="Grid.Row" Value="{Binding Row}"/>
+                        <Setter Property="Grid.RowSpan" Value="{Binding RowSpan}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter Property="Panel.ZIndex" Value="99999"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+                <!--<Button Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" 
                        Content="Left Side"/>
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Parent="{Binding Path=., RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
@@ -281,6 +325,6 @@
             <Button Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" 
                        Content="Right Side"/>-->
 
-        </ItemsControl>
+            </ItemsControl>
     </DataTemplate>
 </ResourceDictionary>

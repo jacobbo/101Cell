@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using WpfApp1.TableControl;
 
 namespace WpfApp1
 {
@@ -18,25 +19,66 @@ namespace WpfApp1
             foreach (var i in Enumerable.Range(0, ColumnCount))
             {
                 //CellViewModelBase cell = null;
-                if (i % 2 == 0)
+                if (i == 0 || i == ColumnCount - 1)
                 {
-                    //var column1 = new ColumnViewModel();
+                    var cell = new ColumnSeparatorViewModel
+                    {
+                        Column = i,
+                        RowSpan = RowCount,
+                        Row = 0
+                    };
+                    Cells.Add(cell);
+                }
+                else if (i % 2 == 0)
+                {
+                    var cell = new ColumnSplitterViewModel
+                    {
+                        Column = i,
+                        RowSpan = RowCount,
+                        Row = i == 8 ? 1 : 0
+                    };
+                    Cells.Add(cell);
+                }
+                else
+                {
                     foreach (var j in Enumerable.Range(0, RowCount))
                     {
                         CellViewModelBase cell;
-                        if (j == 0)
-                        {
-                            cell = new ColumnHeaderViewModel { Text = $"Column{i + 1}" };
-                        }
-                        else
-                        {
-                            cell = new CellViewModel(this) { Column = i, Row = j, Text = $"{{{i}, {j}}}" };
-                        }
 
-                        cell.Column = i;
-                        cell.Row = j;
+                        if (i == 1 && j % 2 == 0)
+                        {
+                            cell = new RowSeparatorViewModel { ColumnSpan = ColumnCount };
+                            cell.Column = i;
+                            cell.Row = j;
 
-                        Cells.Add(cell);
+                            Cells.Add(cell);
+                        }
+                        else if (j == 1)
+                        {
+                            cell = new ColumnHeaderViewModel { Text = $"Column {i}" };
+                            cell.Column = i;
+                            cell.Row = j;
+
+                            if (i == 7)
+                            {
+                                cell.ColumnSpan = 3;
+                            }
+
+                            if (i != 9)
+                            {
+                                Cells.Add(cell);
+                            }
+
+                            
+                        }
+                        else if (j % 2 != 0)
+                        {
+                            cell = new CellViewModel(this) { Text = $"{{{i}, {j}}}" };
+                            cell.Column = i;
+                            cell.Row = j;
+
+                            Cells.Add(cell);
+                        }
                     }
 
                     //column = column1;
@@ -50,17 +92,6 @@ namespace WpfApp1
                     //stringBuilder.Append(i.ToString());
 
                     stringBuilder2.Append($"G{i}:{i};");
-                }
-                else
-                {
-                    var cell = new ColumnSplitterViewModel
-                    {
-                        Column = i,
-                        RowSpan = RowCount,
-                        Row = 0
-                    };
-                    Cells.Add(cell);
-
                 }
             }
 
@@ -123,12 +154,12 @@ namespace WpfApp1
             set { SetField(ref _zoom, value); }
         }
 
-        //private bool _isLayoutSuppressed;
-        //public bool IsLayoutSuppressed
-        //{
-        //    get { return _isLayoutSuppressed; }
-        //    set { SetField(ref _isLayoutSuppressed, value); }
-        //}
+        private bool _isLayoutSuppressed = true;
+        public bool IsLayoutSuppressed
+        {
+            get { return _isLayoutSuppressed; }
+            set { SetField(ref _isLayoutSuppressed, value); }
+        }
 
         private string DefaultCellBackground = "White";
 

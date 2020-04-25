@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace WpfApp1
 {
@@ -21,6 +22,8 @@ namespace WpfApp1
             {
                 DataContext = viewModel
             };
+
+            RenderOptions.SetEdgeMode(window, EdgeMode.Aliased);
 
             window.Closed += (s, a) => viewModel.Dispose();
             window.Show();

@@ -71,6 +71,7 @@
     <Compile Include="BooleanToVisibilityConverter.cs" />
     <Compile Include="CellData.cs" />
     <Compile Include="CellDataService.cs" />
+    <Compile Include="TableControl\ColumnSeparatorViewModel.cs" />
     <Compile Include="TableControl\NameToBrushConverter.cs" />
     <Compile Include="ColorDialog\ColorDialog.xaml.cs">
       <DependentUpon>ColorDialog.xaml</DependentUpon>
@@ -81,17 +82,15 @@
     <Compile Include="TableControl\CellViewModelBase.cs" />
     <Compile Include="TableControl\ColumnSplitterViewModel.cs" />
     <Compile Include="TableControl\ColumnTemplateSelector.cs" />
-    <Compile Include="TableControl\ColumnViewModel.cs" />
-    <Compile Include="TableControl\ColumnViewModelBase.cs" />
     <Compile Include="TableControl\ContextActionViewModel.cs" />
     <Compile Include="TableControl\FocusExtensions.cs" />
     <Compile Include="TableControl\GridExtensions.cs" />
     <Compile Include="NotifyPropertyChangedBase.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RowModel.cs" />
-    <Compile Include="TableControl\RowTemplateSelector.cs" />
     <Compile Include="TableControl\CellViewModel.cs" />
     <Compile Include="TableControl\ColumnHeaderViewModel.cs" />
+    <Compile Include="TableControl\RowSeparatorViewModel.cs" />
     <Compile Include="TableControl\SimpleGridSplitter.xaml.cs">
       <DependentUpon>SimpleGridSplitter.xaml</DependentUpon>
     </Compile>
