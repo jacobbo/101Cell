@@ -133,6 +133,34 @@ namespace WpfApp1
             set { SetField(ref _isHighlighted, value); }
         }
 
+        private bool _isLeftBorderVisible;
+        public bool IsLeftBorderVisible
+        {
+            get { return _isLeftBorderVisible; }
+            set { SetField(ref _isLeftBorderVisible, value); }
+        }
+
+        private bool _isTopBorderVisible;
+        public bool IsTopBorderVisible
+        {
+            get { return _isTopBorderVisible; }
+            set { SetField(ref _isTopBorderVisible, value); }
+        }
+
+        private bool _isRightBorderVisible;
+        public bool IsRightBorderVisible
+        {
+            get { return _isRightBorderVisible; }
+            set { SetField(ref _isRightBorderVisible, value); }
+        }
+
+        private bool _isBottomBorderVisible;
+        public bool IsBottomBorderVisible
+        {
+            get { return _isBottomBorderVisible; }
+            set { SetField(ref _isBottomBorderVisible, value); }
+        }
+
         public ICommand UpKeyCommand { get; }
 
         public ICommand DownKeyCommand { get; }

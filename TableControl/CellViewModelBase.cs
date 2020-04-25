@@ -1,6 +1,6 @@
 ﻿namespace WpfApp1
 {
-    public class CellViewModelBase : NotifyPropertyChangedBase
+    public abstract class CellViewModelBase : NotifyPropertyChangedBase
     {
         public int Column { get; set; }
 
